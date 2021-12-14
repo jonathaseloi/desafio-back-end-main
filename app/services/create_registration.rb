@@ -28,18 +28,18 @@ class CreateRegistration < ApplicationService
   end
 
   def create_account
-    if @payload[:name].include?("Fintera") && fintera_users(@payload) == true
-      CreateAccount.call(@payload, true)
-    else
-      CreateAccount.call(@payload, false)
-    end
+    from_fintera = @payload[:name].include?("Fintera") && fintera_users(@payload)
+    CreateAccount.call(@payload, from_fintera)
   end
 
   def fintera_users(payload)
     with_fintera_user = false
 
     payload[:users].each do |user|
-      with_fintera_user = true if user[:email].include? "fintera.com.br"
+      if user[:email].include? "fintera.com.br"
+        with_fintera_user = true
+        break
+      end
     end
 
     with_fintera_user
