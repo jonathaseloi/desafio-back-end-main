@@ -21,23 +21,14 @@ class CreateAccount < ApplicationService
   end
 
   def is_account_valid?
-    return false if @payload.blank?
-
-    true
+    @payload.present?
   end
 
   def account_params
-    if @from_fintera
-      {
-        name: @payload[:name],
-        active: true,
-      }
-    else
-      {
-        name: @payload[:name],
-        active: false,
-      }
-    end
+    {
+      name: @payload[:name],
+      active: @from_fintera
+    }
   end
 
   def users_params(account)
