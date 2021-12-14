@@ -11,8 +11,8 @@ class CreateRegistration < ApplicationService
               else
                 create_account
               end
-
-    return Result.new(true, @result.data) if @result.success?
+    
+    return Result.new(true, @result.body) if @result.success?
 
     @result
   end
