@@ -21,7 +21,7 @@ RSpec.describe CreateRegistration do
       end
 
       it "calls CreateAccountAndNotifyPartner service" do
-        expect(CreateAccountAndNotifyPartner).to receive(:call).with(payload).and_return(fake_result)
+        allow(CreateAccountAndNotifyPartner).to receive(:call).with(payload).and_return(fake_result)
 
         call
       end
@@ -45,7 +45,7 @@ RSpec.describe CreateRegistration do
       end
 
       it "calls CreateAccountAndNotifyPartner service" do
-        expect(CreateAccountAndNotifyPartners).to receive(:call).with(payload).and_return(fake_result)
+        allow(CreateAccountAndNotifyPartners).to receive(:call).with(payload).and_return(fake_result)
 
         call
       end
@@ -67,7 +67,7 @@ RSpec.describe CreateRegistration do
       end
 
       it "calls CreateAccount service" do
-        expect(CreateAccount).to receive(:call).with(payload, false).and_return(fake_result)
+        allow(CreateAccount).to receive(:call).with(payload, false).and_return(fake_result)
 
         call
       end

@@ -4,14 +4,14 @@ class CreateAccountAndNotifyPartners < ApplicationService
   end
 
   def call
-    CreateAccount.call(@params, is_from_fintera?)
+    CreateAccount.call(@params, from_fintera?)
     NotifyPartner.new.perform
     NotifyPartner.new("another").perform
   end
 
   private
 
-  def is_from_fintera?
+  def from_fintera?
     return false unless @params[:name].include? "Fintera"
 
     @params[:users].each do |user|

@@ -4,13 +4,13 @@ class CreateRegistration < ApplicationService
   end
 
   def call
-    if @payload[:from_partner] == true && @payload[:many_partners] == true
-      @result = create_account_and_notify_partners
-    elsif @payload[:from_partner] == true
-      @result = create_account_and_notify_partner
-    else
-      @result = create_account
-    end
+    @result = if @payload[:from_partner] && @payload[:many_partners]
+                create_account_and_notify_partners
+              elsif @payload[:from_partner]
+                create_account_and_notify_partner
+              else
+                create_account
+              end
 
     return Result.new(true, @result.data) if @result.success?
 
