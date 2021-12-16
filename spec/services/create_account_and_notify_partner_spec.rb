@@ -4,13 +4,14 @@ RSpec.describe CreateAccountAndNotifyPartner do
 
     before { allow(NotifyPartner).to receive(:new).and_return(notify_partner_double) }
 
-    let(:params) { { name: "Fintera - New Account", users: users } }
+    let(:entities) { [{ name: "Empresa Fintera", users: users }] }
+    let(:params) { { name: "Fintera - New Account", entities: entities } }
     let(:notify_partner_double) { instance_double(NotifyPartner) }
 
     context "when some user is from fintera" do
       let(:users) { [{ email: Faker::Internet.email(domain: "fintera.com.br") }] }
 
-      it "creates a new account and notifies partner" do
+      it "creates a new account with entity and notifies partner" do
         expect(CreateAccount).to receive(:call).with(params, true)
         expect(notify_partner_double).to receive(:perform)
 
@@ -21,7 +22,7 @@ RSpec.describe CreateAccountAndNotifyPartner do
     context "when users are not from fintera" do
       let(:users) { [{ email: Faker::Internet.email(domain: "example.com") }] }
 
-      it "creates a new account and notifies partner" do
+      it "creates a new account with entity and notifies partner" do
         expect(CreateAccount).to receive(:call).with(params, false)
         expect(notify_partner_double).to receive(:perform)
 

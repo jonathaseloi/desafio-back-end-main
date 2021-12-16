@@ -8,7 +8,17 @@ class CreateAccount < ApplicationService
   def call
     if account_valid?
       account = Account.new(account_params)
-      return Result.new(true, account) if account.save && User.insert_all(users_params(account))      
+
+      if account.save 
+        entities_params(account).each do |entity|
+          users = User.create(users_params(entity))
+          entity = entity.except(:users)
+          entity_saving = Entity.new(entity)
+          entity_saving.users << users
+          entity_saving.save
+        end
+        return Result.new(true, account)
+      end
       @errors << account.errors.full_messages
     else
       @errors << "Account is not valid"
@@ -27,14 +37,25 @@ class CreateAccount < ApplicationService
     }
   end
 
-  def users_params(account)
-    @payload[:users].map do |user|
+  def entities_params(account)
+    @payload[:entities].map do |entity|
+      {
+        name: entity[:name],
+        account_id: account.id,
+        created_at: Time.zone.now,
+        updated_at: Time.zone.now,
+        users: users_params(entity),
+      }
+    end
+  end
+
+  def users_params(entity)
+    entity[:users].map do |user|
       {
         first_name: user[:first_name],
         last_name: user[:last_name],
         email: user[:email],
         phone: user[:phone].to_s.gsub(/\D/, ""),
-        account_id: account.id,
         created_at: Time.zone.now,
         updated_at: Time.zone.now,
       }

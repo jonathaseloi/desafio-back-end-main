@@ -6,19 +6,26 @@ RSpec.describe "Api::V1::RegistrationsController", type: :request do
       {
         account: {
           name: Faker::Superhero.name, from_partner: true,
-          users: [{
-            email: Faker::Internet.email,
-            first_name: Faker::Name.female_first_name,
-            last_name: Faker::Name.last_name,
-            phone: Faker::PhoneNumber.cell_phone,
-          }],
+          entities: [
+            {
+              name: Faker::Company.name,
+              users: [
+                {
+                  first_name: Faker::Name.first_name,
+                  last_name: Faker::Name.last_name,
+                  email: Faker::Internet.email,
+                  phone: "(11) 97111-0101",
+                },
+              ],
+            },
+          ],
         },
       }
     end
 
-    it "renders 200 success" do
+    it "renders 201 success" do
       expect(response).to have_http_status(:created)
-      expect(JSON.parse(response.body)).to include({ "id" => Account.last.id })
+      expect(JSON.parse(response.body)).to include({ "id" => "1" })
     end
   end
 end

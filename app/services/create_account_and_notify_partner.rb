@@ -13,8 +13,10 @@ class CreateAccountAndNotifyPartner < ApplicationService
   def from_fintera?
     return false unless @params[:name].include? "Fintera"
 
-    @params[:users].each do |user|
-      return true if user[:email].include? "fintera.com.br"
+    @params[:entities].each do |entity|
+      entity[:users].each do |user|
+        return true if user[:email].include? "fintera.com.br"
+      end
     end
 
     false

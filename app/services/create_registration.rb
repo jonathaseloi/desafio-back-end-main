@@ -4,15 +4,13 @@ class CreateRegistration < ApplicationService
   end
 
   def call
-    @result = if @payload[:from_partner] && @payload[:many_partners]
-                create_account_and_notify_partners
-              elsif @payload[:from_partner]
-                create_account_and_notify_partner
-              else
-                create_account
-              end
-    
-    return Result.new(true, @result.body) if @result.success?
+    if @payload[:from_partner] && @payload[:many_partners]
+      @result = create_account_and_notify_partners
+    elsif @payload[:from_partner]
+      @result = create_account_and_notify_partner
+    else
+      @result = create_account
+    end
 
     @result
   end
@@ -38,7 +36,6 @@ class CreateRegistration < ApplicationService
     payload[:users].each do |user|
       if user[:email].include? "fintera.com.br"
         with_fintera_user = true
-        break
       end
     end
 
