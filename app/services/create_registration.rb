@@ -18,11 +18,11 @@ class CreateRegistration < ApplicationService
   private
 
   def create_account_and_notify_partner
-    CreateAccountAndNotifyPartner.call(@payload)
+    CreateAccountAndNotifyPartner.call(@payload, fintera_users(@payload))
   end
 
   def create_account_and_notify_partners
-    CreateAccountAndNotifyPartners.call(@payload)
+    CreateAccountAndNotifyPartners.call(@payload, fintera_users(@payload))
   end
 
   def create_account
@@ -31,14 +31,12 @@ class CreateRegistration < ApplicationService
   end
 
   def fintera_users(payload)
-    with_fintera_user = false
-
-    payload[:users].each do |user|
-      if user[:email].include? "fintera.com.br"
-        with_fintera_user = true
+    @payload[:entities].each do |entity|
+      entity[:users].each do |user|
+        return true if user[:email].include? "fintera.com.br"
       end
     end
 
-    with_fintera_user
+    false
   end
 end

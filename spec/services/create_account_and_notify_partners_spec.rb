@@ -1,6 +1,6 @@
 RSpec.describe CreateAccountAndNotifyPartners do
   describe "#call" do
-    subject(:call) { described_class.call(params) }
+    subject(:call) { described_class.call(params, from_fintera) }
 
     before { allow(NotifyPartner).to receive(:new).and_return(notify_partner_double) }
 
@@ -10,9 +10,10 @@ RSpec.describe CreateAccountAndNotifyPartners do
 
     context "when some user is from fintera" do
       let(:users) { [{ email: Faker::Internet.email(domain: "fintera.com.br") }] }
+      let(:from_fintera) { true }
 
       it "creates a new account with entity and notifies partner" do
-        expect(CreateAccount).to receive(:call).with(params, true)
+        expect(CreateAccount).to receive(:call).with(params, from_fintera)
         expect(notify_partner_double).to receive(:perform).twice
 
         call
@@ -21,9 +22,10 @@ RSpec.describe CreateAccountAndNotifyPartners do
 
     context "when users are not from fintera" do
       let(:users) { [{ email: Faker::Internet.email(domain: "example.com") }] }
+      let(:from_fintera) { false }
 
       it "creates a new account with entity and notifies partner" do
-        expect(CreateAccount).to receive(:call).with(params, false)
+        expect(CreateAccount).to receive(:call).with(params, from_fintera)
         expect(notify_partner_double).to receive(:perform).twice
 
         call
