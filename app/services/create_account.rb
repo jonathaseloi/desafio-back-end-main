@@ -1,4 +1,7 @@
 class CreateAccount < ApplicationService
+
+  attr_accessor :payload, :from_fintera, :errors
+
   def initialize(payload, from_fintera = false)
     @payload = payload
     @from_fintera = from_fintera
@@ -19,26 +22,26 @@ class CreateAccount < ApplicationService
         end
         return Result.new(true, account)
       end
-      @errors << account.errors.full_messages
+      errors << account.errors.full_messages
     else
-      @errors << "Account is not valid"
+      errors << "Account is not valid"
     end
-    Result.new(false, nil, @errors.join(","))
+    Result.new(false, nil, errors.join(","))
   end
 
   def account_valid?
-    @payload.present?
+    payload.present?
   end
 
   def account_params
     {
-      name: @payload[:name],
-      active: @from_fintera,
+      name: payload[:name],
+      active: from_fintera,
     }
   end
 
   def entities_params(account)
-    @payload[:entities].map do |entity|
+    payload[:entities].map do |entity|
       {
         name: entity[:name],
         account_id: account.id,

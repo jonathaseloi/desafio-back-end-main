@@ -23,8 +23,7 @@ RSpec.describe "Api::V1::RegistrationsController", type: :request do
 
     it "renders 201 success" do
       stub_request(:post, "https://61b69749c95dd70017d40f4b.mockapi.io/awesome_partner_leads")
-        .with(
-          body: { "message" => "new registration", "partner" => "internal" },
+        .with(body: { "message" => "new registration", "partner" => "internal" },
           headers: {
         'Accept'=>'*/*',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
@@ -41,8 +40,7 @@ RSpec.describe "Api::V1::RegistrationsController", type: :request do
 
     it "renders 422 error" do
       stub_request(:post, "https://61b69749c95dd70017d40f4b.mockapi.io/awesome_partner_leads")
-        .with(
-          body: { "message" => "new registration", "partner" => "internal" },
+        .with(body: { "message" => "new registration", "partner" => "internal" },
           headers: {
         'Accept'=>'*/*',
         'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
