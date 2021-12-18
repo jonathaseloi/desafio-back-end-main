@@ -8,7 +8,7 @@ class CreateEntitiesUsersJoinTable < ActiveRecord::Migration[6.1]
       t.integer :user_id
     end
   
-    add_index :entities_users, [:entity_id, :user_id]
+    add_index :entities_users, %i[:entity_id :user_id]
   end
   
   def down

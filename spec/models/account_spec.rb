@@ -4,6 +4,6 @@ RSpec.describe Account do
   end
 
   describe "presence of name" do
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
   end
 end

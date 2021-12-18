@@ -22,16 +22,15 @@ RSpec.describe "Api::V1::RegistrationsQueueController", type: :request do
     end
 
     it "renders 204" do
-      stub_request(:post, "https://61b69749c95dd70017d40f4b.mockapi.io/awesome_partner_leads").
-      with(
-        body: {"message"=>"new registration", "partner"=>"internal"},
-        headers: {
-      'Accept'=>'*/*',
-      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Content-Type'=>'application/x-www-form-urlencoded',
-      'User-Agent'=>'Faraday v1.8.0'
-        }).
-      to_return({ status: 204, body: { "id" => "1" }.to_json, headers: {} }) 
+      stub_request(:post, "https://61b69749c95dd70017d40f4b.mockapi.io/awesome_partner_leads")
+        .with(body: { "message" => "new registration", "partner" => "internal" },
+          headers: {
+        'Accept'=>'*/*',
+        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'Content-Type'=>'application/x-www-form-urlencoded',
+        'User-Agent'=>'Faraday v1.8.0'
+          }).
+        to_return({ status: 204, body: { "id" => "1" }.to_json, headers: {} }) 
 
       post api_v1_registrations_queue_index_path(params: params)
 

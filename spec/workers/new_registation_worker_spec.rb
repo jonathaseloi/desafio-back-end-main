@@ -56,8 +56,8 @@ RSpec.describe NewRegistrationWorker, type: :worker do
     end
   end
 
-  context "queue" do 
-    it "job in correct queue" do 
+  context "when queue" do
+    it "job in correct queue" do
       described_class.perform_async
       assert_equal "default", described_class.queue
     end
