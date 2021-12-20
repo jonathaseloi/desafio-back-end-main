@@ -7,9 +7,9 @@ class CreateRegistration < ApplicationService
   end
 
   def call
-    if payload["from_partner"] && payload["many_partners"]
+    if payload[:from_partner] && payload[:many_partners]
       result = create_account_and_notify_partners
-    elsif payload["from_partner"]
+    elsif payload[:from_partner]
       result = create_account_and_notify_partner
     else
       result = create_account
@@ -29,14 +29,14 @@ class CreateRegistration < ApplicationService
   end
 
   def create_account
-    from_fintera = payload["name"].include?("Fintera") && fintera_users
+    from_fintera = payload[:name].include?("Fintera") && fintera_users
     CreateAccount.call(payload, from_fintera)
   end
 
   def fintera_users
-    payload["entities"].each do |entity|
-      entity["users"].each do |user|
-        return true if user["email"].include? "fintera.com.br"
+    payload[:entities].each do |entity|
+      entity[:users].each do |user|
+        return true if user[:email].include? "fintera.com.br"
       end
     end
 
